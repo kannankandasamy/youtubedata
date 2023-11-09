@@ -32,25 +32,36 @@ class DataViewer:
             st.write("Data loader for getting data from youtube and load into mongodb and mysql")
             channel_id_from_st = st.text_input('Channel Id','')
             if st.button('Load'):
-                st.write("Load Started")
-                yd = Youtube()
-                youtube = yd.get_api_connection()  
-                st.write("Youtube object created successfully")
-                mongo = Mongod()
-                op = mongo.load_youtube_details_mongo(yd, channel_id_from_st)
-                st.write("Loaded into mongodb "+op)
                 mys = Mysql()
-                op = mys.load_channel_to_mysql(mongo)
-                st.write("Loaded Channels to Mysql "+op)
+                query = """select * from channels where channel_id = '{}';"""
+                op_df = mys.get_data_from_mysql(query.format(channel_id_from_st))
+                if len(op_df.index)==1:
+                    st.write("This channel already loaded, please give valid channel_id to load")
+                elif len(channel_id_from_st.strip())==0:
+                    st.write("Channel_id is not valid, please give valid channel_id to load")
+                else:
+                    st.write("Load Started")
+                    yd = Youtube()
+                    youtube = yd.get_api_connection()  
+                    st.write("Youtube object created successfully")
+                    mongo = Mongod()
+                    op = mongo.load_youtube_details_mongo(yd, channel_id_from_st)
+                    st.write("Loaded into mongodb "+op)
 
-                op = mys.load_playlist_to_mysql(mongo)
-                st.write("Loaded Playlist to Mysql "+op)
+                    op = mys.load_channel_to_mysql(mongo)
+                    st.write("Loaded Channels to Mysql "+op)
 
-                op = mys.load_videos_to_mysql(mongo)
-                st.write("Loaded Videos details to Mysql "+op)      
+                    op = mys.load_playlist_to_mysql(mongo)
+                    st.write("Loaded Playlist to Mysql "+op)
 
-                op = mys.load_comments_to_mysql(mongo)
-                st.write("Loaded Comments to Mysql "+op)
+                    op = mys.load_videos_to_mysql(mongo)
+                    st.write("Loaded Videos details to Mysql "+op)      
+
+                    op = mys.load_comments_to_mysql(mongo)
+                    st.write("Loaded Comments to Mysql "+op)
+
+                    st.write("------------------------------------------------")
+                    st.write("Load to MongoDB and MySQL completed successfully")
 
         if selected == "Youtube Data Analysis":
             #st.title(f"You selected {selected}")     
