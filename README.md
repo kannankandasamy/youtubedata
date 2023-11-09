@@ -6,7 +6,7 @@ To execute this project we can use data_viewer.py as below:
 
 >$streamlit run data_viewer.py
 
-requirements.txt:
+## requirements.txt:
 
  - streamlit
  - pandas
