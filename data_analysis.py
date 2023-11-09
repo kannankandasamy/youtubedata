@@ -6,10 +6,10 @@ from library.mongod_load import *
 from library.mysql_load import *
 
 class DataAnalytics:
+
     if __name__=="__main__":
         op = "SUCCESS"
-        api_key = "****"
-        yd = Youtube(api_key)
+        yd = Youtube()
         print(yd.api_key)
 
         youtube = yd.get_api_connection()    

@@ -26,9 +26,32 @@ class DataViewer:
             st.write("This is Kannan Kandasamy")
             st.write("You can reach me at kannanvijay@hotmail.com")
             st.write("Stackoverflow https://stackoverflow.com/users/6466279/kannan-kandasamy")
+            st.write("LinkedIn https://www.linkedin.com/in/kannankandasamy/")
         if selected == "Load Data":
             st.title("Load Data")
             st.write("Data loader for getting data from youtube and load into mongodb and mysql")
+            channel_id_from_st = st.text_input('Channel Id','')
+            if st.button('Load'):
+                st.write("Load Started")
+                yd = Youtube()
+                youtube = yd.get_api_connection()  
+                st.write("Youtube object created successfully")
+                mongo = Mongod()
+                op = mongo.load_youtube_details_mongo(yd, channel_id_from_st)
+                st.write("Loaded into mongodb "+op)
+                mys = Mysql()
+                op = mys.load_channel_to_mysql(mongo)
+                st.write("Loaded Channels to Mysql "+op)
+
+                op = mys.load_playlist_to_mysql(mongo)
+                st.write("Loaded Playlist to Mysql "+op)
+
+                op = mys.load_videos_to_mysql(mongo)
+                st.write("Loaded Videos details to Mysql "+op)      
+
+                op = mys.load_comments_to_mysql(mongo)
+                st.write("Loaded Comments to Mysql "+op)
+
         if selected == "Youtube Data Analysis":
             #st.title(f"You selected {selected}")     
 

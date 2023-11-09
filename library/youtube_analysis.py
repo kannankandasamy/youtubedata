@@ -1,8 +1,11 @@
 import googleapiclient.discovery
+import configparser
+from library.utils import *
 
 class Youtube:
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self):
+        conf = get_data_config()
+        self.api_key = conf["api_key"]
 
     def get_api_connection(self):
         api_service_name = "youtube"
