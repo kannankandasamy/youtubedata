@@ -8,10 +8,10 @@ To execute this project we can use data_viewer.py as below:
 
 requirements.txt:
 
-streamlit
-pandas
-mysql
-pymongo
-googleapiclient
+ - streamlit
+ - pandas
+ - mysql
+ - pymongo
+ - googleapiclient
 
 In to-be state these mongodb can be moved to cloud and load the data into snowflake datawarehouse by extending this project.
