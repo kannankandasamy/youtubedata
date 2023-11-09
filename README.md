@@ -14,4 +14,8 @@ To execute this project we can use data_viewer.py as below:
  - pymongo
  - googleapiclient
 
+## Screenshots
+
+![alt text]images/01_home.png
+
 In to-be state these mongodb can be moved to cloud and load the data into snowflake datawarehouse by extending this project.
