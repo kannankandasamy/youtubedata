@@ -20,7 +20,16 @@ To execute this project we can use data_viewer.py as below:
   <img src="images/01_home.png" width="1000" title="Home page">
 </p>
 
+Loading channel information
 
+<p align="center">
+  <img src="images/02_load_data.png" width="1000" title="Loading channel">
+</p>
 
+Youtube Data Analysis
+
+<p align="center">
+  <img src="images/03_youtube_data.png" width="1000" title="Descriptive analysis">
+</p>
 
 In to-be state these mongodb can be moved to cloud and load the data into snowflake datawarehouse by extending this project.
