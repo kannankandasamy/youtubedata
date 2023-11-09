@@ -4,7 +4,7 @@ This project is to load channel, video, playlist, comments into mongodb and mysq
 
 To execute this project we can use data_viewer.py as below:
 
-$streamlit run data_viewer.py
+>$streamlit run data_viewer.py
 
 requirements.txt:
 
