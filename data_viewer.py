@@ -15,8 +15,8 @@ class DataViewer:
         with st.sidebar:
             selected = option_menu(
                 menu_title=None,
-                options=["Home","Youtube Data Analysis","Load Data","About"],
-                default_index=1
+                options=["Home","Load Data","Youtube Data Analysis","About"],
+                default_index=0
             )
 
         if selected == "Home":
