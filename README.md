@@ -1,6 +1,14 @@
 # Youtube data Analytics
 
-This project is to load channel, video, playlist, comments into mongodb and mysql and do descriptive analytics of slicing and dicing of data.
+This project is to load channel, video, playlist, comments into mongodb and mysql and do descriptive analytics and slicing and dicing of data.
+
+## About
+
+Kannan Kandasamy
+
+ - You can reach me at kannanvijay@hotmail.com
+ - Stackoverflow https://stackoverflow.com/users/6466279/kannan-kandasamy
+ - LinkedIn https://www.linkedin.com/in/kannankandasamy/
 
 To execute this project we can use data_viewer.py as below:
 
