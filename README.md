@@ -6,9 +6,9 @@ This project is to load channel, video, playlist, comments into mongodb and mysq
 
 Kannan Kandasamy
 
- - You can reach me at kannanvijay@hotmail.com
- - Stackoverflow https://stackoverflow.com/users/6466279/kannan-kandasamy
- - LinkedIn https://www.linkedin.com/in/kannankandasamy/
+ - You can reach me at  kannanvijay@hotmail.com
+ - Stackoverflow        https://stackoverflow.com/users/6466279/kannan-kandasamy
+ - LinkedIn             https://www.linkedin.com/in/kannankandasamy/
 
 To execute this project we can use data_viewer.py as below:
 
