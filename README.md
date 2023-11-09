@@ -17,7 +17,7 @@ To execute this project we can use data_viewer.py as below:
 ## Screenshots
 
 <p align="center">
-  <img src="images/01_home.png" width="350" title="Home page">
+  <img src="images/01_home.png" width="800" title="Home page">
 </p>
 
 
