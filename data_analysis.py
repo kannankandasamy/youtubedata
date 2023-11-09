@@ -8,7 +8,7 @@ from library.mysql_load import *
 class DataAnalytics:
     if __name__=="__main__":
         op = "SUCCESS"
-        api_key = "AIzaSyAnCVRvszsKKvapt5MMuaBnHxpbV3KE-3M"
+        api_key = "****"
         yd = Youtube(api_key)
         print(yd.api_key)
 

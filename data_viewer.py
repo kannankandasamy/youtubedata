@@ -15,7 +15,7 @@ class DataViewer:
         with st.sidebar:
             selected = option_menu(
                 menu_title=None,
-                options=["Home","Youtube Data Analysis","About"],
+                options=["Home","Youtube Data Analysis","Load Data","About"],
                 default_index=1
             )
 
@@ -26,6 +26,9 @@ class DataViewer:
             st.write("This is Kannan Kandasamy")
             st.write("You can reach me at kannanvijay@hotmail.com")
             st.write("Stackoverflow https://stackoverflow.com/users/6466279/kannan-kandasamy")
+        if selected == "Load Data":
+            st.title("Load Data")
+            st.write("Data loader for getting data from youtube and load into mongodb and mysql")
         if selected == "Youtube Data Analysis":
             #st.title(f"You selected {selected}")     
 
