@@ -89,7 +89,7 @@ class DataViewer:
 
             if question_selected.startswith("1."):
                 st.write("1. Videos list for selected channel")    
-                query = """select video_title as Video_Name from videos where channel_name = '{}';"""
+                query = """select video_title as Video_Name, channel_name from videos where channel_name = '{}';"""
                 pl_df = mys.get_data_from_mysql(query.format(channel_selected))
                 #print(chn_df)                
                 st.dataframe(pl_df
@@ -135,6 +135,9 @@ class DataViewer:
                 #print(chn_df)                
                 st.dataframe(df4
                             ,hide_index=True,width=1200)   
+                st.write("Issue in commentThreads retrieval - retrieving only default 20, raised issue in issue tracker")
+                st.write("https://issuetracker.google.com/issues/309981763")
+
             elif question_selected.startswith("5."):
                 st.write("5. Highest Number of likes")    
                 query = """select video_title as vidoe_name, channel_name, video_like_count from videos
@@ -182,6 +185,14 @@ class DataViewer:
                 #print(chn_df)                
                 st.dataframe(df9
                             ,hide_index=True,width=1200)  
+
+                st.write("In chart")
+                fig1, ax1 = plt.subplots()
+                ax1.pie(df9["average_duration_seconds"], labels=df9["channel_name"])
+                ax1.axis("equal")
+                st.pyplot(fig1)
+                
+
             elif question_selected.startswith("10."):
                 st.write("10. Highest number of comments for a channel")    
                 query = """select v.channel_name as channel_name, count(*) as comments_count from videos v
@@ -194,5 +205,7 @@ class DataViewer:
                 #print(chn_df)                
                 st.dataframe(df10
                             ,hide_index=True,width=1200)   
+                st.write("In bar chart")
+                st.bar_chart(df10, x="channel_name",y="comments_count",color="channel_name")                
             else:
                 st.write("Select valid option")
