@@ -149,6 +149,7 @@ class DataViewer:
                             ,hide_index=True,width=1200)       
             elif question_selected.startswith("6."):
                 st.write("Youtube returns only likes count not the dislike counts")
+                
             elif question_selected.startswith("7."):
                 st.write("7. Total Number of views for a channel")    
                 query = """select channel_name, view_count from channels
