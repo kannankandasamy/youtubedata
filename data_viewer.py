@@ -125,12 +125,29 @@ class DataViewer:
                 st.bar_chart(df3, x="video_name",y="video_view_count",color="video_name")
 
             elif question_selected.startswith("4."):
-                st.write("4. Most viewed videos")    
-                query = """select v.video_title as video_name, count(*) as comments_count from videos v
+                st.write("4. How many comments on videos")    
+                #query = """select v.video_title as video_name, count(*) as comments_count from videos v
+                #            join comments c
+                #            on v.video_id = c.video_id
+                #            group by v.video_title
+                #            order by v.video_title;"""
+                query = """
+                    select video_title, channel_name, video_comments_count, channel_comments_count
+                    from 
+                    (
+                        select video_title, channel_name, count(comment_id) over (partition by video_id) video_comments_count,
+                        count(comment_id) over (partition by channel_name) as channel_comments_count, 
+                        row_number() over(partition by channel_name, video_id order by comment_id) as rn
+                        from 
+                        (
+                            select v.video_id, video_title, c.comment_id, v.channel_name
+                            from videos v
                             join comments c
                             on v.video_id = c.video_id
-                            group by v.video_title
-                            order by v.video_title;"""
+                        ) a
+                    ) b
+                    where b.rn = 1;
+                """
                 df4 = mys.get_data_from_mysql(query)
                 #print(chn_df)                
                 st.dataframe(df4
@@ -149,7 +166,7 @@ class DataViewer:
                             ,hide_index=True,width=1200)       
             elif question_selected.startswith("6."):
                 st.write("Youtube returns only likes count not the dislike counts")
-                
+
             elif question_selected.startswith("7."):
                 st.write("7. Total Number of views for a channel")    
                 query = """select channel_name, view_count from channels
