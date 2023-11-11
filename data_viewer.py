@@ -184,17 +184,18 @@ class DataViewer:
                 st.pyplot(fig1)
 
             elif question_selected.startswith("8."):
+                year_selected=st.selectbox("Select year", options = [2023,2022,2021,2020], index=1)
                 st.write("8. Videos published on 2022 with channel names")    
-                query = """select channel_name, count(*) as videos_on_2022 from videos where year(date(video_publishet_at))=2022
+                query = """select channel_name, count(*) as videos_on_year from videos where year(date(video_publishet_at))={}
                             group by channel_name
                             having count(*)>0;"""
-                df8 = mys.get_data_from_mysql(query)
+                df8 = mys.get_data_from_mysql(query.format(year_selected))
                 #print(chn_df)                
                 st.dataframe(df8
                             ,hide_index=True,width=1200)   
 
                 st.write("In bar chart")
-                st.bar_chart(df8, x="channel_name",y="videos_on_2022",color="channel_name")
+                st.bar_chart(df8, x="channel_name",y="videos_on_year",color="channel_name")
 
             elif question_selected.startswith("9."):
                 st.write("9. Average duration of videos in channels")    
