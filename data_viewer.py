@@ -3,6 +3,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import matplotlib.pyplot as plt
 import altair as alt
+from PIL import Image
 
 from library.youtube_analysis import *
 from library.mongod_load import *
@@ -17,12 +18,16 @@ class DataViewer:
         with st.sidebar:
             selected = option_menu(
                 menu_title=None,
-                options=["Home","Load Data","Youtube Data Analysis","About"],
+                options=["Home","Load Data","Youtube Data Analysis","Architecture","About"],
                 default_index=0
             )
 
         if selected == "Home":
-            st.title(f"Data Analytics")     
+            st.title(f"Data Analytics")  
+        if selected == "Architecture":
+            st.write("Data product to get data from youtube using API reference and load into MongoDB and then into mysql db")
+            image = Image.open('images/arch.drawio.png')
+            st.image(image, caption="Architecture")            
         if selected == "About":
             st.title(f"About")                             
             st.write("This is Kannan Kandasamy")
