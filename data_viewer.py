@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_option_menu import option_menu
 import matplotlib.pyplot as plt
+import altair as alt
 
 from library.youtube_analysis import *
 from library.mongod_load import *
@@ -158,13 +159,22 @@ class DataViewer:
 
             elif question_selected.startswith("5."):
                 st.write("5. Highest Number of likes")    
-                query = """select video_title as vidoe_name, channel_name, video_like_count from videos
+                query = """select video_title as video_name, channel_name, video_like_count from videos
                             order by video_like_count desc
                             limit 10;"""
                 df5 = mys.get_data_from_mysql(query)
                 #print(chn_df)                
                 st.dataframe(df5
-                            ,hide_index=True,width=1200)       
+                            ,hide_index=True,width=1200)     
+                
+                st.write("In bar chart")
+                c = alt.Chart(df5).mark_bar().encode(
+                    x=alt.X('video_name', sort=None),
+                    y='video_like_count',
+                    color='video_name'
+                )
+                st.altair_chart(c, use_container_width=True)
+
             elif question_selected.startswith("6."):
                 st.write("Youtube returns only likes count not the dislike counts")
 
