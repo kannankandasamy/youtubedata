@@ -1,13 +1,24 @@
 import mysql.connector
 import pandas as pd
+import sqlalchemy
+from sqlalchemy import create_engine
+from library.utils import *
 
 class Mysql:
     def __init__(self):
-        self.cnx = mysql.connector.Connect(user="root",password="admin", host="127.0.0.1", database="ytube_data")
+        conf = get_data_config()
+        self.pwd = conf["mysql_pwd"]        
+        self.cnx = mysql.connector.Connect(user="root",password=self.pwd, host="127.0.0.1", database="ytube_data")        
 
     def get_mysql_connection(self):
-        cnx = mysql.connector.Connect(user="root",password="admin", host="127.0.0.1", database="ytube_data")
+        cnx = mysql.connector.Connect(user="root",password=self.pwd, host="127.0.0.1", database="ytube_data")
         return cnx
+    
+    def get_mysql_alchemy_engine(self):
+        engine = sqlalchemy.create_engine("mysql://{0}:{1}@{2}:{3}/{4}".format("root",self.pwd,"127.0.0.1","3306","ytube_data"))
+        con = engine.connect()
+        self.engine = engine
+        return engine
 
     def execute_mysql_query(self, query):
         try:
@@ -239,3 +250,125 @@ class Mysql:
             return df
         except:
             return "FAILED"        
+        
+
+    def load_channel_to_mysql_alchemy(self, mongo_obj):
+        #get channel details from mongo
+        ch_df = mongo_obj.get_data_from_mongo("channel_details")
+        #display(ch_df)
+        print(ch_df.columns)
+        print(ch_df.size)
+        print(ch_df.dtypes)
+
+        create_channel_query = """create table if not exists channels(channel_name varchar(200),
+                                                                    channel_id varchar(100),
+                                                                    channel_custom_url varchar(100),
+                                                                    video_count int,
+                                                                    view_count bigint,
+                                                                    subscriber_count bigint,
+                                                                    channel_description text,
+                                                                    playlist_id varchar(100)
+                                                                    ) """
+
+        drop_channel_query = """drop table if exists channels"""                                                            
+        op = self.execute_mysql_query(drop_channel_query)
+        op = self.execute_mysql_query(create_channel_query)
+
+        try:
+            eng = self.get_mysql_alchemy_engine()
+            op = ch_df.to_sql(name='channels', con=eng,if_exists='append',index=False)
+            print(op)
+        except:
+            pass
+        return "SUCCESS ROWS "+str(op)                   
+    
+
+    def load_playlist_to_mysql_alchemy(self, mongo_obj):
+        #get playlist details from mongo
+        ch_df = mongo_obj.get_data_from_mongo_with_array("playlist_details")
+        print(ch_df.columns)
+        print(ch_df.size)
+
+        drop_query = """drop table if exists playlist"""    
+        create_query = """create table if not exists playlist(playlist_id varchar(100),
+                                                                    playlist_title varchar(200),
+                                                                    channel_id varchar(100),
+                                                                    channel_name varchar(200),
+                                                                    published_at varchar(50),
+                                                                    video_count int
+                                                                    ) """
+
+        op = self.execute_mysql_query(drop_query)
+        op = self.execute_mysql_query(create_query)
+
+        try:
+            eng = self.get_mysql_alchemy_engine()
+            op = ch_df.to_sql(name='playlist', con=eng,if_exists='append',index=False)
+        except:
+            pass
+        return "SUCCESS ROWS "+str(op)               
+    
+    def load_videos_to_mysql_alchemy(self, mongo_obj):
+        #get channel details from mongo
+        ch_df = mongo_obj.get_data_from_mongo_with_array("video_details")
+        print(ch_df.columns)
+        print(ch_df.size)
+        ch_df['video_tags']=ch_df['video_tags'].astype("string")
+        print(ch_df.dtypes)
+
+        drop_query = """drop table if exists videos"""    
+        create_query = """create table if not exists videos(video_title varchar(200),
+                                                            video_id varchar(100),
+                                                            channel_name varchar(200),
+                                                            video_description text,
+                                                            video_tags text,
+                                                            video_thumbnail text,
+                                                            video_view_count bigint,
+                                                            video_like_count bigint,
+                                                            video_comment_count bigint,
+                                                            video_favorite_count bigint,
+                                                            video_publishet_at  varchar(50),
+                                                            video_duration  varchar(100),
+                                                            video_definition  varchar(100),
+                                                            video_caption  varchar(200)
+                                                                    ) """
+
+        op = self.execute_mysql_query(drop_query)
+        op = self.execute_mysql_query(create_query)
+
+
+        try:
+            eng = self.get_mysql_alchemy_engine()
+            op = ch_df.to_sql(name='videos', con=eng,if_exists='append',index=False)
+            print(op)
+        except Exception as ex:
+            print(ex)
+            return "FAILED "+ex
+        return "SUCCESS ROWS "+str(op)           
+
+
+    def load_comments_to_mysql_alchemy(self, mongo_obj):
+        #get comments details from mongo
+        ch_df = mongo_obj.get_data_from_mongo_with_array("comments_details")
+        print(ch_df.columns)
+        print(ch_df.size)       
+
+        drop_query = """drop table if exists comments"""    
+        create_query = """create table if not exists comments(comment_id varchar(100), 
+                                                                video_id varchar(100), 
+                                                                comment_text text, 
+                                                                comment_author varchar(200), 
+                                                                comment_published_at varchar(50)
+                                                                    ) """
+
+        op = self.execute_mysql_query(drop_query)
+        op = self.execute_mysql_query(create_query)
+
+
+        try:
+            eng = self.get_mysql_alchemy_engine()
+            op = ch_df.to_sql(name='comments', con=eng,if_exists='append',index=False)
+            print(op)
+        except:
+            return "FAILED"
+        return "SUCCESS ROWS "+str(op)           

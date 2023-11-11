@@ -19,19 +19,19 @@ class DataAnalytics:
         mongo = Mongod()
 
         #Channel to harvest
-        channel_id = "UCuI5XcJYynHa5k_lqDzAgwQ"
+        channel_id = "UCkRFwipiIqBTakN-mkZ-GcQ"
         #op = mongo.load_youtube_details_mongo(yd, channel_id)
         #print(op)
 
         mys = Mysql()
-        #op = mys.load_channel_to_mysql(mongo)
+        op = mys.load_channel_to_mysql_alchemy(mongo)
         #print(op)
 
-        #op = mys.load_playlist_to_mysql(mongo)
+        op = mys.load_playlist_to_mysql_alchemy(mongo)
         #print(op)
 
-        #op = mys.load_videos_to_mysql(mongo)
+        op = mys.load_videos_to_mysql_alchemy(mongo)
         #print(op)        
 
-        #op = mys.load_comments_to_mysql(mongo)
+        op = mys.load_comments_to_mysql_alchemy(mongo)
         print(op)

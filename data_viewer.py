@@ -48,17 +48,18 @@ class DataViewer:
                     mongo = Mongod()
                     op = mongo.load_youtube_details_mongo(yd, channel_id_from_st)
                     st.write("Loaded into mongodb "+op)
+                    st.write("------------------------------------------------")                    
 
-                    op = mys.load_channel_to_mysql(mongo)
+                    op = mys.load_channel_to_mysql_alchemy(mongo)
                     st.write("Loaded Channels to Mysql "+op)
 
-                    op = mys.load_playlist_to_mysql(mongo)
+                    op = mys.load_playlist_to_mysql_alchemy(mongo)
                     st.write("Loaded Playlist to Mysql "+op)
 
-                    op = mys.load_videos_to_mysql(mongo)
+                    op = mys.load_videos_to_mysql_alchemy(mongo)
                     st.write("Loaded Videos details to Mysql "+op)      
 
-                    op = mys.load_comments_to_mysql(mongo)
+                    op = mys.load_comments_to_mysql_alchemy(mongo)
                     st.write("Loaded Comments to Mysql "+op)
 
                     st.write("------------------------------------------------")
