@@ -25,7 +25,7 @@ class DataViewer:
         if selected == "Home":
             st.title(f"Data Analytics")  
         if selected == "Architecture":
-            st.write("Data product to get data from youtube using API reference and load into MongoDB and then into mysql db")
+            st.write("Data product to get data from youtube using API, load into MongoDB and then into mysql db")
             image = Image.open('images/arch.drawio.png')
             st.image(image, caption="Architecture")            
         if selected == "About":
@@ -124,20 +124,39 @@ class DataViewer:
                             order by video_view_count desc
                             limit 10;"""
                 df3 = mys.get_data_from_mysql(query)
-                #print(chn_df)                
-                st.dataframe(df3
-                            ,hide_index=True,width=1200)      
-                 
+
+                st.data_editor(
+                    df3,
+                    column_config={
+                        "video_name": st.column_config.Column(
+                            "Video Name",
+                            width="large",
+                        ),
+                        "channel_name":st.column_config.Column(
+                            "Channel Name",
+                            width="small",
+                        ),
+                        "video_view_count":st.column_config.Column(
+                            "View count",
+                            width="small",
+                        ),
+                    },
+                    use_container_width=True,
+                    hide_index=True
+                ) 
+
                 st.write("In bar chart")
-                st.bar_chart(df3, x="video_name",y="video_view_count",color="video_name")
+                #st.bar_chart(df3, x="video_name",y="video_view_count",color="video_name")
+                st.write("In bar chart")
+                c = alt.Chart(df3).mark_bar().encode(
+                    x=alt.X('video_name', sort=None),
+                    y='video_view_count',
+                    color='video_name'
+                )
+                st.altair_chart(c, use_container_width=True)                
 
             elif question_selected.startswith("4."):
                 st.write("4. How many comments on videos")    
-                #query = """select v.video_title as video_name, count(*) as comments_count from videos v
-                #            join comments c
-                #            on v.video_id = c.video_id
-                #            group by v.video_title
-                #            order by v.video_title;"""
                 query = """
                     select video_title, channel_name, video_comments_count, channel_comments_count
                     from 
@@ -156,9 +175,29 @@ class DataViewer:
                     where b.rn = 1;
                 """
                 df4 = mys.get_data_from_mysql(query)
-                #print(chn_df)                
-                st.dataframe(df4
-                            ,hide_index=True,width=1200)   
+                st.data_editor(
+                    df4,
+                    column_config={
+                        "video_title": st.column_config.Column(
+                            "Video Name",
+                            width="large",
+                        ),
+                        "channel_name":st.column_config.Column(
+                            "Channel Name",
+                            width="small",
+                        ),
+                        "video_comments_count":st.column_config.Column(
+                            "Comments count",
+                            width="small",
+                        ),
+                        "channel_comments_count":st.column_config.Column(
+                            "Channel Comments count",
+                            width="small",
+                        ),                        
+                    },
+                    use_container_width=True,
+                    hide_index=True
+                )                 
                 st.write("Issue in commentThreads retrieval - retrieving only default 20, raised issue in issue tracker")
                 st.write("https://issuetracker.google.com/issues/309981763")
 
@@ -168,9 +207,27 @@ class DataViewer:
                             order by video_like_count desc
                             limit 10;"""
                 df5 = mys.get_data_from_mysql(query)
-                #print(chn_df)                
-                st.dataframe(df5
-                            ,hide_index=True,width=1200)     
+
+                st.data_editor(
+                    df5,
+                    column_config={
+                        "video_name": st.column_config.Column(
+                            "Video Name",
+                            width="large",
+                        ),
+                        "channel_name":st.column_config.Column(
+                            "Channel Name",
+                            width="small",
+                        ),
+                        "video_like_count":st.column_config.Column(
+                            "Likes count",
+                            width="small",
+                        ),
+                    },
+                    use_container_width=True,
+                    hide_index=True
+                ) 
+                   
                 
                 st.write("In bar chart")
                 c = alt.Chart(df5).mark_bar().encode(
@@ -205,9 +262,21 @@ class DataViewer:
                             group by channel_name
                             having count(*)>0;"""
                 df8 = mys.get_data_from_mysql(query.format(year_selected))
-                #print(chn_df)                
-                st.dataframe(df8
-                            ,hide_index=True,width=1200)   
+                st.dataframe(df8,hide_index=True,use_container_width=True)   
+                st.data_editor(
+                    df8,
+                    column_config={
+                        "channel_name":"Channel Name",
+                        "videos_on_year":st.column_config.ProgressColumn(
+                            "Selected year Videos",
+                            format="%f",
+                            min_value=0,
+                            max_value=300
+                        ),
+                    },
+                    use_container_width=True,
+                    hide_index=True
+                )
 
                 st.write("In bar chart")
                 st.bar_chart(df8, x="channel_name",y="videos_on_year",color="channel_name")
@@ -217,7 +286,6 @@ class DataViewer:
                 query = """select channel_name, round(avg(TIME_TO_SEC(STR_TO_DATE(video_duration, 'PT%iM%sS')))) as average_duration_seconds from videos
                             group by channel_name;"""
                 df9 = mys.get_data_from_mysql(query)
-                #print(chn_df)                
                 st.dataframe(df9
                             ,hide_index=True,width=1200)  
 
@@ -237,7 +305,6 @@ class DataViewer:
                             order by comments_count desc
                             limit 10;         """
                 df10 = mys.get_data_from_mysql(query)
-                #print(chn_df)                
                 st.dataframe(df10
                             ,hide_index=True,width=1200)   
                 st.write("In bar chart")
