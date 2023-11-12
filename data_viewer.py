@@ -76,25 +76,26 @@ class DataViewer:
 
             st.title("Youtube Data Analysis")
 
-            #st.write("Select Channel")
-            query = """select channel_name, channel_id from channels;"""
-            chn_df1 = mys.get_data_from_mysql(query)
-            channel_selected = st.selectbox("Select Channel", options = chn_df1['channel_name'])            
-            #st.write(channel_selected)
 
-            st.write("1. Videos list for selected channel")    
-            query = """select video_title as Video_Name from videos where channel_name = '{}';"""
-            pl_df = mys.get_data_from_mysql(query.format(channel_selected))
+            #st.write("1. Videos list for selected channel")    
+            #query = """select video_title as Video_Name from videos where channel_name = '{}';"""
+            #pl_df = mys.get_data_from_mysql(query.format(channel_selected))
             #print(chn_df)                
-            st.dataframe(pl_df
-                        ,hide_index=True,width=1200)     
+            #st.dataframe(pl_df
+            #            ,hide_index=True,width=1200)     
 
             #st.write("Select question")
             query = """select question_id, question_name from questions order by question_id ;"""
             qn_df1 = mys.get_data_from_mysql(query)
-            question_selected = st.selectbox("Select Question", options = qn_df1['question_name'])            
+            question_selected = st.sidebar.selectbox("Select Question", options = qn_df1['question_name'])            
 
             if question_selected.startswith("1."):
+                #st.write("Select Channel")
+                query = """select channel_name, channel_id from channels;"""
+                chn_df1 = mys.get_data_from_mysql(query)
+                channel_selected = st.sidebar.selectbox("Select Channel", options = chn_df1['channel_name'])            
+                #st.write(channel_selected)                
+            
                 st.write("1. Videos list for selected channel")    
                 query = """select video_title as Video_Name, channel_name from videos where channel_name = '{}';"""
                 pl_df = mys.get_data_from_mysql(query.format(channel_selected))
@@ -256,7 +257,7 @@ class DataViewer:
                 st.pyplot(fig1)
 
             elif question_selected.startswith("8."):
-                year_selected=st.selectbox("Select year", options = [2023,2022,2021,2020], index=1)
+                year_selected=st.sidebar.selectbox("Select year", options = [2023,2022,2021,2020], index=1)
                 st.write("8. Videos published on 2022 with channel names")    
                 query = """select channel_name, count(*) as videos_on_year from videos where year(date(video_publishet_at))={}
                             group by channel_name
