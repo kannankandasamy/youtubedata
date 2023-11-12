@@ -93,12 +93,14 @@ class DataViewer:
                 #st.write("Select Channel")
                 query = """select channel_name, channel_id from channels;"""
                 chn_df1 = mys.get_data_from_mysql(query)
-                channel_selected = st.sidebar.selectbox("Select Channel", options = chn_df1['channel_name'])            
+                channel_selected = st.sidebar.multiselect("Select Channel", options = chn_df1['channel_name'], default=list(chn_df1['channel_name'])[0])            
                 #st.write(channel_selected)                
             
-                st.write("1. Videos list for selected channel")    
-                query = """select video_title as Video_Name, channel_name from videos where channel_name = '{}';"""
-                pl_df = mys.get_data_from_mysql(query.format(channel_selected))
+                st.write("1. Videos list for selected channel")   
+                st.write(channel_selected) 
+                ch_selected="','".join(i for i in channel_selected)
+                query = """select video_title as Video_Name, channel_name from videos where channel_name in ('{}');"""
+                pl_df = mys.get_data_from_mysql(query.format(ch_selected))
                 #print(chn_df)                
                 st.dataframe(pl_df
                             ,hide_index=True,width=1200)                   
@@ -223,7 +225,7 @@ class DataViewer:
                         "video_like_count":st.column_config.Column(
                             "Likes count",
                             width="small",
-                        ),
+                        )
                     },
                     use_container_width=True,
                     hide_index=True
