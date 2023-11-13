@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""Module to run streamlit application to do youtube data analysis
+
+Author      : Kannan Kandasamy
+Draft       : Initial draft
+Description : Module to show streamlit UI application to do youtube
+data analytics
+"""
 import pandas as pd
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -10,6 +18,9 @@ from library.mongod_load import *
 from library.mysql_load import *
 
 class DataViewer:
+    """
+    DataViewer uses streamlit and shows all UI options
+    """
     if __name__=="__main__":
      
         mongo = Mongod()
@@ -75,16 +86,6 @@ class DataViewer:
             #st.title(f"You selected {selected}")     
 
             st.title("Youtube Data Analysis")
-
-
-            #st.write("1. Videos list for selected channel")    
-            #query = """select video_title as Video_Name from videos where channel_name = '{}';"""
-            #pl_df = mys.get_data_from_mysql(query.format(channel_selected))
-            #print(chn_df)                
-            #st.dataframe(pl_df
-            #            ,hide_index=True,width=1200)     
-
-            #st.write("Select question")
             query = """select question_id, question_name from questions order by question_id ;"""
             qn_df1 = mys.get_data_from_mysql(query)
             question_selected = st.sidebar.selectbox("Select Question", options = qn_df1['question_name'])            

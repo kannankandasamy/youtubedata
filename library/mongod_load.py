@@ -3,10 +3,19 @@ import pandas as pd
 from library.youtube_analysis import *
 
 class Mongod:
+    """
+    MongoDB class to access MongoDB and stores data into local mongo db
+
+    - Gets data from youtube using API references
+    - Stores into MongoDB
+    """
     def __init__(self):
         self.client = pymongo.MongoClient("mongodb://localhost:27017/")
 
     def load_youtube_details_mongo(self, youtube_obj, channel_id):
+        """
+        Gets youtube data and loads into mongodb function
+        """
         youtube = youtube_obj.get_api_connection()
         channel_details = youtube_obj.get_channel_details(youtube, channel_id)
         print("completed channel details")
@@ -30,6 +39,9 @@ class Mongod:
 
 
     def get_data_from_mongo(self, details):
+        """
+        Gets data from mongo dbo
+        """
         ch_list = []
         db = self.client["youtubedb"]
         coll1 = db["youtube_channel_details"]
@@ -39,6 +51,9 @@ class Mongod:
         return df        
 
     def get_data_from_mongo_with_array(self, details):
+        """
+        Gets data from mongo db with object contains arrays
+        """        
         ch_list = []
         db = self.client["youtubedb"]
         coll1 = db["youtube_channel_details"]

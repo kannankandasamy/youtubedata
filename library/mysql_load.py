@@ -5,22 +5,38 @@ from sqlalchemy import create_engine
 from library.utils import *
 
 class Mysql:
+    """
+    Mysql class to get mysql connection object and does data processing using mysql
+
+    - Stores data into mysql methods are there to store line by line and bulk
+    - Retreives data from mysql using pandas dataframe and lists
+    """
     def __init__(self):
         conf = get_data_config()
         self.pwd = conf["mysql_pwd"]        
         self.cnx = mysql.connector.Connect(user="root",password=self.pwd, host="127.0.0.1", database="ytube_data")        
 
     def get_mysql_connection(self):
+        """
+        Gets mysql regular connection to do row by row processing
+        """
         cnx = mysql.connector.Connect(user="root",password=self.pwd, host="127.0.0.1", database="ytube_data")
         return cnx
     
     def get_mysql_alchemy_engine(self):
+        """
+        Gets mysql alchemy engine connection to do dataframe level bulk processing
+        Passwords are coming thru data.conf
+        """
         engine = sqlalchemy.create_engine("mysql://{0}:{1}@{2}:{3}/{4}".format("root",self.pwd,"127.0.0.1","3306","ytube_data"))
         con = engine.connect()
         self.engine = engine
         return engine
 
     def execute_mysql_query(self, query):
+        """
+        Executes a sql query and returns success or failed, this is primarily to do ddl operations
+        """
         try:
             cnx = self.get_mysql_connection()
             with cnx.cursor() as cursor:
@@ -33,6 +49,9 @@ class Mysql:
             return "FAILED"        
 
     def execute_mysql_query_with_values(self, query, values):
+        """
+        Executes a sql query with values associated to it
+        """
         try:
             cnx = self.get_mysql_connection()
             with cnx.cursor() as cursor:
@@ -45,6 +64,9 @@ class Mysql:
             return "FAILED"              
 
     def load_channel_to_mysql(self, mongo_obj):
+        """
+        Gets channel details from mongodb and loads into mysql row by row
+        """
         #get channel details from mongo
         ch_df = mongo_obj.get_data_from_mongo("channel_details")
         #display(ch_df)
@@ -94,6 +116,9 @@ class Mysql:
 
 
     def load_playlist_to_mysql(self, mongo_obj):
+        """
+        Gets playlist details from mongodb and loads into mysql row by row
+        """
         #get playlist details from mongo
         ch_df = mongo_obj.get_data_from_mongo_with_array("playlist_details")
         print(ch_df.columns)
@@ -134,6 +159,9 @@ class Mysql:
 
 
     def load_videos_to_mysql(self, mongo_obj):
+        """
+        Gets videos details from mongodb and loads into mysql row by row
+        """
         #get channel details from mongo
         ch_df = mongo_obj.get_data_from_mongo_with_array("video_details")
         print(ch_df.columns)
@@ -201,6 +229,9 @@ class Mysql:
 
 
     def load_comments_to_mysql(self, mongo_obj):
+        """
+        Gets comments details from mongodb and loads into mysql row by row
+        """
         #get comments details from mongo
         ch_df = mongo_obj.get_data_from_mongo_with_array("comments_details")
         print(ch_df.columns)
@@ -243,6 +274,9 @@ class Mysql:
 
 
     def get_data_from_mysql(self, query):
+        """
+        Gets data from mysql as a pandas dataframe by running a query
+        """
         try:
             cnx = self.get_mysql_connection()
             df = pd.read_sql(query, cnx)
@@ -253,6 +287,9 @@ class Mysql:
         
 
     def load_channel_to_mysql_alchemy(self, mongo_obj):
+        """
+        Gets channel details from mongodb and loads into mysql as bulk
+        """
         #get channel details from mongo
         ch_df = mongo_obj.get_data_from_mongo("channel_details")
         #display(ch_df)
@@ -284,6 +321,9 @@ class Mysql:
     
 
     def load_playlist_to_mysql_alchemy(self, mongo_obj):
+        """
+        Gets playlist details from mongodb and loads into mysql as bulk
+        """        
         #get playlist details from mongo
         ch_df = mongo_obj.get_data_from_mongo_with_array("playlist_details")
         print(ch_df.columns)
@@ -309,6 +349,9 @@ class Mysql:
         return "SUCCESS ROWS "+str(op)               
     
     def load_videos_to_mysql_alchemy(self, mongo_obj):
+        """
+        Gets videos details from mongodb and loads into mysql as bulk
+        """        
         #get channel details from mongo
         ch_df = mongo_obj.get_data_from_mongo_with_array("video_details")
         print(ch_df.columns)
@@ -348,6 +391,9 @@ class Mysql:
 
 
     def load_comments_to_mysql_alchemy(self, mongo_obj):
+        """
+        Gets comments details from mongodb and loads into mysql as bulk
+        """        
         #get comments details from mongo
         ch_df = mongo_obj.get_data_from_mongo_with_array("comments_details")
         print(ch_df.columns)

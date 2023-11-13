@@ -3,11 +3,20 @@ import configparser
 from library.utils import *
 
 class Youtube:
+    """
+    Gets data from Youtube by using API Key references
+
+    - Uses these for getting different domains like channels, videos etc.,
+    - API_KEY is from config file and it has quota limit of 10k
+    """
     def __init__(self):
         conf = get_data_config()
         self.api_key = conf["api_key"]
 
     def get_api_connection(self):
+        """
+        Gets youtube connection by passing correct API_KEY reference
+        """
         api_service_name = "youtube"
         api_version = "v3"
         youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=self.api_key)
@@ -16,6 +25,9 @@ class Youtube:
     
     #Get channel details
     def get_channel_details(self, youtube, channel_id):
+        """
+        Gets Channel details and does pre-processing to store it as single document
+        """
         #channel_id = "UCpSLfHgOlcSBlkxRnMKcnVw"
         request = youtube.channels().list(
             part="snippet,contentDetails,statistics",
@@ -37,6 +49,9 @@ class Youtube:
     
     #Get Playlist details
     def get_playlist_details(self, youtube, channel_id):
+        """
+        Gets playlist details for giving channel and does pre-processing to store it as single document
+        """
         playlist_details = []
         next_page_token = None
 
@@ -67,6 +82,9 @@ class Youtube:
 
     #Get video id's and more header information
     def get_video_headers(self, youtube, channel_id):
+        """
+        Gets video headers and does pre-processing to store it as single document
+        """
         vid_ids = []
         request = youtube.channels().list(
             part="contentDetails",
@@ -95,6 +113,9 @@ class Youtube:
 
     #Get video full details
     def get_video_full_details(self, youtube,vid_id_details):
+        """
+        Gets needed video details for given video_ids and does pre-processing to store it as single document
+        """
         video_details = []
         for vid in vid_id_details:
             request3=youtube.videos().list(
@@ -125,6 +146,9 @@ class Youtube:
 
     #Get comments details
     def get_comments_full_details(self, youtube,vid_id_details):
+        """
+        Gets Comments details and does pre-processing to store it as single document
+        """
         comment_details = []
         try:
             for vid in vid_id_details:
