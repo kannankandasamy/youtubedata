@@ -97,13 +97,21 @@ class DataViewer:
                 #st.write(channel_selected)                
             
                 st.write("1. Videos list for selected channel")   
-                st.write(channel_selected) 
                 ch_selected="','".join(i for i in channel_selected)
                 query = """select video_title as Video_Name, channel_name from videos where channel_name in ('{}');"""
                 pl_df = mys.get_data_from_mysql(query.format(ch_selected))
                 #print(chn_df)                
                 st.dataframe(pl_df
-                            ,hide_index=True,width=1200)                   
+                            ,hide_index=True,width=1200)     
+
+                st.write("Number of videos per channel")
+                query = """select channel_name, count(*) as number_of_videos from videos where channel_name in ('{}')
+                            group by channel_name;"""
+                df1a = mys.get_data_from_mysql(query.format(ch_selected))
+                #print(chn_df)                
+                st.dataframe(df1a
+                            ,hide_index=True,width=1200)     
+                                            
             elif question_selected.startswith("2."):                
                 st.write("2. Most Number videos")    
                 query = """select channel_name, count(*) video_count from videos
