@@ -106,7 +106,8 @@ class DataViewer:
 
                 st.write("Number of videos per channel")
                 query = """select channel_name, count(*) as number_of_videos from videos where channel_name in ('{}')
-                            group by channel_name;"""
+                            group by channel_name
+                            order by channel_name;"""
                 df1a = mys.get_data_from_mysql(query.format(ch_selected))
                 #print(chn_df)                
                 st.dataframe(df1a
